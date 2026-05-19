@@ -3,9 +3,10 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import MainLayout from './layouts/MainLayout';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
+import Dashboard from './pages/DashboardPage';
 
 // Pages de test temporaires
-const Dashboard = () => <div><h2>Voici le contenu du Dashboard</h2></div>;
+
 const Projects = () => <div><h2>Voici la liste des projets</h2></div>;
 const Investisseurs = () => <div><h2>Voici la liste des Investisseurs</h2></div>;
 
