@@ -1,16 +1,47 @@
-# React + Vite
+# 🚀 Crowdfunder Frontend - Système d'Authentification
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Ce dépôt contient la brique d'authentification complète du projet **Crowdfunder**, entièrement synchronisée avec notre modèle et notre API backend commune. 
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🛠️ Stack Technique Utilisée
 
-## React Compiler
+*   **Framework :** React (Vite)
+*   **Gestion d'état global :** Redux Toolkit (`@reduxjs/toolkit` + `react-redux`)
+*   **Routage :** React Router DOM
+*   **Styles :** Tailwind CSS
+*   **Client HTTP :** Axios (avec intercepteur automatique de Token JWT)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 🔑 Fonctionnalités Prêtes
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+1.  **Inscription (`/register`) :** Formulaire connecté permettant de choisir son rôle : `investor` (Investisseur) ou `owner` (Porteur de projet).
+2.  **Connexion (`/login`) :** Authentification par email/mot de passe. Récupère le token et les données utilisateur, puis les stocke dans Redux et le `localStorage`.
+3.  **Déconnexion (`/logout`) :** Nettoie instantanément le store Redux et supprime les clés du `localStorage`, puis redirige vers la page de connexion.
+4.  **Protection des routes (`MainLayout`) :** Bloque l'accès aux pages privées (Dashboard, Projets...) si l'utilisateur n'est pas connecté.
+5.  **Interface Dynamique (`Navbar`) :** Affiche en temps réel le nom de l'utilisateur connecté, son badge de rôle, et **son solde (balance)** s'il s'agit d'un investisseur.
+
+---
+
+## 📁 Architecture des Fichiers Clés
+
+Voici les fichiers que j'ai mis en place et que tu peux utiliser/modifier :
+
+```text
+src/
+├── components/
+│   └── navigation/
+│       ├── Navbar.jsx       # Barre supérieure avec Nom + Rôle + Solde (Redux)
+│       └── Sidebar.jsx      # Menu latéral avec liens et bouton Logout
+├── layouts/
+│   └── MainLayout.jsx       # Layout privé (Vérifie la présence du Token JWT)
+├── pages/
+│   └── auth/
+│       ├── Login.jsx        # Formulaire de connexion
+│       └── Register.jsx     # Formulaire d'inscription (Gestion rôles investor/owner)
+├── services/
+│   └── api.js               # Client Axios + Intercepteur (Injecte le Bearer Token)
+└── store/
+    └── slices/
+        └── authSlice.js     # Gestion Redux globale (loginUser, registerUser, logout)
