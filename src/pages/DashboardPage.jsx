@@ -30,9 +30,7 @@ const Dashboard = () => {
 
   return (
     <div className="space-y-8 animate-fadeIn">
-      {/* ----------------------------------------------------
-          SECTION 1 : LES KPIS (HAUT DE PAGE)
-         ---------------------------------------------------- */}
+     
       <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
         
         {/* KPI 1 : Total Projets */}
@@ -73,9 +71,8 @@ const Dashboard = () => {
 
       </div>
 
-      {/* ----------------------------------------------------
-          SECTION 2 : TABLEAU DES PROJETS RÉCENTS
-         ---------------------------------------------------- */}
+       
+         {/* SECTION 2 : TABLEAU DES PROJETS RÉCENTS */}
       <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
         <div className="p-5 border-b border-slate-100 flex items-center justify-between">
           <h3 className="font-bold text-slate-900 text-lg">Projets récents</h3>
