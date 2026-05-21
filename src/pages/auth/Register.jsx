@@ -1,4 +1,4 @@
-// src/pages/auth/Register.jsx
+
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -10,7 +10,7 @@ const Register = () => {
     name: '', 
     email: '', 
     password: '', 
-    role: 'investor' // 'investor' par défaut comme dans ton schéma Mongoose
+    role: 'investor' // 'investor' par défaut 
   });
   const [successMessage, setSuccessMessage] = useState('');
   
@@ -41,7 +41,7 @@ const Register = () => {
       <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8 border border-slate-100">
         
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-slate-800">🚀 Crowdfunder</h2>
+          <h2 className="text-3xl font-bold text-slate-800"> Crowdfunder</h2>
           <p className="text-sm text-slate-500 mt-2">Créez votre compte sur la plateforme</p>
         </div>
 
@@ -53,7 +53,7 @@ const Register = () => {
 
         {successMessage && (
           <div className="mb-4 p-3 bg-emerald-50 text-emerald-600 text-sm rounded-lg border border-emerald-100">
-            🎉 {successMessage}
+             {successMessage}
           </div>
         )}
 

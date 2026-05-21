@@ -66,11 +66,11 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(loginUser.pending, (state) => {
+      .addCase(loginUser.pending, (state) => {  //En cours
         state.loading = true;
         state.error = null;
       })
-      .addCase(loginUser.fulfilled, (state, action) => {
+      .addCase(loginUser.fulfilled, (state, action) => {   //Si succès --> État fulfilled (Résolue)
         state.loading = false;
         state.token = action.payload.token;
         state.user = action.payload.user; // Les infos du user injectées dans le state global
