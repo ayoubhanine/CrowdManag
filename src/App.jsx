@@ -7,19 +7,10 @@ import ProjectListPage from "./Components/ProjectListPage";
 import AjouterProject from "./Components/AjouterProject";
 import ProjectDetailsPage from "./Components/DeatilsProject";
 import EditProjectPage from "./Components/EditProject";
+import Investors from "./pages/Investors";
+import Dashboard from "./pages/DashboardPage"
 
-// Pages de test temporaires
-const Dashboard = () => (
-  <div>
-    <h2>Voici le contenu du Dashboard</h2>
-  </div>
-);
-// const Projects = () => <div><ProjectListPage /></div>;
-const Investisseurs = () => (
-  <div>
-    <h2>Voici la liste des Investisseurs</h2>
-  </div>
-);
+
 
 function App() {
   return (
@@ -38,7 +29,7 @@ function App() {
 
           <Route path="projects/:id" element={<ProjectDetailsPage />} />
           <Route path="/projects/:id/edit" element={<EditProjectPage />} />
-          <Route path="projects/investisseurs" element={<Investisseurs />} />
+          <Route path="investisseurs" element={<Investors />} />
         </Route>
       </Routes>
     </BrowserRouter>
