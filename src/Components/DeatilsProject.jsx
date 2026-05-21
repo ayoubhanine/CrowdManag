@@ -4,8 +4,13 @@ import { useSelector } from "react-redux";
 import getProjectByIdApi from "../services/getById";
 import deletProjectByIdApi from "../services/deletProject";
 import editProjectByIdApi from "../services/editProject";
+import investInProjectApi from "../services/invest";
 
 export default function ProjectDetailsPage() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [investAmount, setInvestAmount] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -15,6 +20,36 @@ export default function ProjectDetailsPage() {
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const handleInvestSubmit = async (e) => {
+    e.preventDefault();
+    if (!investAmount || Number(investAmount) <= 0) {
+      alert("Veuillez entrer un montant valide");
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+      const responseData = await investInProjectApi(id, investAmount);
+
+      const updatedProject = responseData?.project || responseData;
+
+      if (updatedProject && updatedProject._id) {
+        setProject(updatedProject);
+      } else {
+        const freshData = await getProjectByIdApi(id);
+        setProject(freshData);
+      }
+
+      setIsModalOpen(false);
+      setInvestAmount("");
+      alert("Votre investissement a été enregistré avec succès !");
+    } catch (err) {
+      alert(err.message || "Erreur lors de l'investissement");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const handleCloture = async () => {
     const confirmCloture = window.confirm(
@@ -107,24 +142,41 @@ export default function ProjectDetailsPage() {
     <div className="min-h-screen bg-slate-50 p-8 font-sans">
       {/* TOP NAVIGATION & ACTIONS */}
       <div className="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-        <button
-          onClick={() => navigate("/projects")}
-          className="text-xs font-semibold text-gray-500 hover:text-gray-800 tracking-wider uppercase flex items-center gap-2 transition"
-        >
-          ← RETOUR AU REGISTRE DES ACTIFS
-        </button>
+        <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-start">
+          <button
+            onClick={() => navigate("/projects")}
+            className="text-xs font-semibold text-gray-500 hover:text-gray-800 tracking-wider uppercase flex items-center gap-2 transition"
+          >
+            ← RETOUR AU REGISTRE DES ACTIFS
+          </button>
+
+          {!isOwner && (
+            <button
+              onClick={() => setIsModalOpen(true)}
+              disabled={project.status === "closed"}
+              className={`font-semibold px-4 py-1.5 rounded text-xs tracking-wider uppercase transition shadow-sm
+      ${
+        project.status === "closed"
+          ? "bg-gray-200 text-gray-400 cursor-not-allowed opacity-60"
+          : "bg-indigo-600 text-white hover:bg-indigo-700 hover:scale-[1.02]"
+      }`}
+            >
+              INVESTIR
+            </button>
+          )}
+        </div>
 
         {isOwner && (
-          <div className="flex gap-2 animate-fadeIn">
+          <div className="flex gap-2 animate-fadeIn w-full sm:w-auto justify-end">
             <button
               onClick={() => navigate(`/projects/${id}/edit`)}
               disabled={project.status === "closed"}
               className={`font-medium px-4 py-1.5 rounded text-xs tracking-wider uppercase transition shadow-sm border
-        ${
-          project.status === "closed"
-            ? "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed opacity-60"
-            : "bg-white text-gray-700 border-gray-200 hover:bg-gray-50"
-        }`}
+                ${
+                  project.status === "closed"
+                    ? "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed opacity-60"
+                    : "bg-white text-gray-700 border-gray-200 hover:bg-gray-50"
+                }`}
             >
               EDITER
             </button>
@@ -133,11 +185,11 @@ export default function ProjectDetailsPage() {
               onClick={handleCloture}
               disabled={project.status === "closed"}
               className={`font-medium px-4 py-1.5 rounded text-xs tracking-wider uppercase transition shadow-sm
-        ${
-          project.status === "closed"
-            ? "bg-gray-200 text-gray-400 cursor-not-allowed opacity-60"
-            : "bg-slate-900 text-white hover:bg-slate-800"
-        }`}
+                ${
+                  project.status === "closed"
+                    ? "bg-gray-200 text-gray-400 cursor-not-allowed opacity-60"
+                    : "bg-slate-900 text-white hover:bg-slate-800"
+                }`}
             >
               CLÔTURER
             </button>
@@ -276,28 +328,103 @@ export default function ProjectDetailsPage() {
                 </td>
               </tr>
             ) : (
-              investorsList.map((inv, index) => (
-                <tr key={index} className="hover:bg-slate-50/50 transition">
-                  <td className="p-4 px-6 font-bold text-slate-900">
-                    {inv.name || "Investisseur"}
-                  </td>
-                  <td className="p-4">
-                    {Number(inv.amount).toLocaleString()} MAD
-                  </td>
-                  <td className="p-4">
-                    <span className="bg-blue-50 text-blue-600 text-xs font-bold px-2 py-0.5 rounded">
-                      {inv.share || "0"}%
-                    </span>
-                  </td>
-                  <td className="p-4 text-right px-6 text-gray-400 text-xs font-normal">
-                    {formatOwner(project.owner)}
-                  </td>
-                </tr>
-              ))
+              investorsList.map((inv, index) => {
+                const investorId =
+                  inv._id ||
+                  inv.id ||
+                  inv.user ||
+                  (typeof inv === "string" ? inv : null);
+
+                const isCurrentUser = investorId === currentUserId;
+
+                const displayName =
+                  inv.name ||
+                  (isCurrentUser ? currentUser?.name : null) ||
+                  "Investisseur";
+
+                return (
+                  <tr key={index} className="hover:bg-slate-50/50 transition">
+                    <td className="p-4 px-6 font-bold text-slate-900">
+                      {displayName}
+                    </td>
+                    <td className="p-4">
+                      {Number(inv.amount || inv).toLocaleString()} MAD
+                    </td>
+                    <td className="p-4">
+                      <span className="bg-blue-50 text-blue-600 text-xs font-bold px-2 py-0.5 rounded">
+                        {inv.share || "0"}%
+                      </span>
+                    </td>
+                    <td className="p-4 text-right px-6 text-gray-400 text-xs font-normal">
+                      {formatOwner(project.owner)}
+                    </td>
+                  </tr>
+                );
+              })
             )}
           </tbody>
         </table>
       </div>
+
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-50 animate-fadeIn">
+          <div className="bg-white rounded-xl p-6 w-full max-w-md shadow-xl border border-gray-100 mx-4">
+            {/* Header Modal */}
+            <div className="flex justify-between items-center mb-4 border-b pb-2">
+              <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wide">
+                Saisir le montant de l'investissement
+              </h3>
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="text-gray-400 hover:text-gray-600 text-xl font-bold leading-none"
+              >
+                &times;
+              </button>
+            </div>
+
+            {/* Form Modal */}
+            <form onSubmit={handleInvestSubmit} className="space-y-4">
+              <div>
+                <label className="block text-[10px] font-bold text-gray-400 uppercase mb-2">
+                  Montant (MAD)
+                </label>
+                <div className="relative">
+                  <input
+                    type="number"
+                    value={investAmount}
+                    onChange={(e) => setInvestAmount(e.target.value)}
+                    placeholder="Ex: 5000"
+                    required
+                    min="1"
+                    className="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:border-indigo-500 font-semibold"
+                  />
+                  <span className="absolute right-4 top-2.5 text-xs font-bold text-gray-400">
+                    MAD
+                  </span>
+                </div>
+              </div>
+
+              {/* Buttons Actions */}
+              <div className="flex justify-end gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  className="bg-white border text-gray-600 px-4 py-1.5 rounded-lg text-xs font-medium uppercase tracking-wider hover:bg-gray-50 transition"
+                >
+                  Annuler
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="bg-indigo-600 text-white px-4 py-1.5 rounded-lg text-xs font-semibold uppercase tracking-wider hover:bg-indigo-700 transition disabled:bg-indigo-400"
+                >
+                  {isSubmitting ? "Confirmation..." : "Confirmer"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

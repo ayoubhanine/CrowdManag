@@ -46,17 +46,14 @@ export default function EditProjectPage() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // 2️⃣ دالة إرسال التعديلات للـ API
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setSubmitting(true);
       setError(null);
       
-      // العيادة للـ API ديال التعديل
       await editProjectByIdApi(id, formData);
       
-      // ملي يجرى التعديل بنجاح، يرجع لصفحة التفاصيل
       navigate(`/projects/${id}`);
     } catch (err) {
       setError(err.message || "Erreur lors de la modification");
