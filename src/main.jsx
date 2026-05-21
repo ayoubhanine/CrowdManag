@@ -8,6 +8,7 @@ import { store } from './store'; // Ajuste le chemin si ton fichier index.js est
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Provider store={store}>
-    <App /></Provider>
+    <App />
+    </Provider>
   </StrictMode>,
 )

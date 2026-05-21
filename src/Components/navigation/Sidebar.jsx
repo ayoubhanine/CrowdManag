@@ -40,7 +40,7 @@ const Sidebar = () => {
             ➕ Create Project
           </Link>
           <Link 
-            to="/projects/investisseurs" 
+            to="/investisseurs" 
             className="text-slate-300 hover:text-white hover:bg-slate-800 px-3 py-2 rounded-lg text-sm font-medium transition-all"
           >
             👥 Investisseurs
