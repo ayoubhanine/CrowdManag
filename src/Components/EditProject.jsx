@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import getProjectByIdApi from "../services/getById"; // حتاجوها باش نجيبو الداتا الحالية أولا
-import editProjectByIdApi from "../services/editProject"; // الفانكشن اللي عاد صاوبنا
+import getProjectByIdApi from "../services/getById"; 
+import editProjectByIdApi from "../services/editProject"; 
 
 export default function EditProjectPage() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // الـ State فين غانخزنو الداتا ديال الفورم
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -19,7 +18,6 @@ export default function EditProjectPage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
 
-  // 1️⃣ أول حاجة: كنجيبو الداتا الحالية ديال المشروع باش نعمرو الـ Inputs
   useEffect(() => {
     async function loadProject() {
       try {
@@ -40,7 +38,6 @@ export default function EditProjectPage() {
     if (id) loadProject();
   }, [id]);
 
-  // دالة لتحديث الـ State ملي يكتب المستخدم ف الـ inputs
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
