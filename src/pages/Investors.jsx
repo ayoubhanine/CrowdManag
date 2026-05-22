@@ -38,7 +38,7 @@ const Investors = () => {
             <tr className="bg-slate-50 border-b border-slate-700 text-slate-500 text-[10px] font-black uppercase tracking-widest">
               <th className="p-4 pl-6">Nom de l'investisseur</th>
               <th className="p-4">Projet Associé</th>
-              <th className="p-4">montant investi (€)</th>
+              <th className="p-4">montant investi (MAD)</th>
               <th className="p-4 pr-6 text-right">Part (%)</th>
             </tr>
           </thead>
@@ -57,7 +57,7 @@ const Investors = () => {
                 
                 {/* Volume financier */}
                 <td className="p-5 font-mono text-slate-800 font-semibold">
-                  €{partner.volume.toLocaleString("fr-FR")}
+                  {partner.volume.toLocaleString("fr-FR")} MAD
                 </td>
                 
                 {/* Pourcentage de participation (Badge bleu) */}

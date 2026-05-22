@@ -65,7 +65,7 @@ const Dashboard = () => {
           <span className="text-xs font-semibold text-emerald-700 uppercase tracking-wider">Capital Total Levé</span>
           <div className="flex items-baseline gap-1 mt-2">
             <span className="text-3xl font-black text-slate-900">{kpis.totalRaised}</span>
-            <span className="text-lg font-bold text-slate-900">€</span>
+            <span className="text-lg font-bold text-slate-900">MAD</span>
           </div>
         </div>
 
@@ -111,10 +111,10 @@ const Dashboard = () => {
                   </td>
 
                   {/* Capital Cible */}
-                  <td className="p-4 font-medium text-slate-900">{project.capital} €</td>
+                  <td className="p-4 font-medium text-slate-900">{project.capital} MAD</td>
 
                   {/* Investi */}
-                  <td className="p-4 font-semibold text-slate-700">{project.currentAmount} €</td>
+                  <td className="p-4 font-semibold text-slate-700">{project.currentAmount} MAD</td>
 
                   {/* Barre de progression */}
                   <td className="p-4 pr-6">
