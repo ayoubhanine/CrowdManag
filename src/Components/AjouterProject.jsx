@@ -57,6 +57,7 @@ function AjouterProject() {
             value={form.description}
             onChange={handleChange}
             className="w-full border p-2 rounded"
+            required
           />
 
           <input
@@ -66,16 +67,17 @@ function AjouterProject() {
             value={form.capital}
             onChange={handleChange}
             className="w-full border p-2 rounded"
+            required
           />
 
-          <input
+          {/* <input
             name="currentAmount"
             type="number"
             placeholder="Current Amount"
             value={form.currentAmount}
             onChange={handleChange}
             className="w-full border p-2 rounded"
-          />
+          /> */}
 
           <input
             name="maxInvestmentPercent"
@@ -84,15 +86,16 @@ function AjouterProject() {
             value={form.maxInvestmentPercent}
             onChange={handleChange}
             className="w-full border p-2 rounded"
+            required
           />
 
-          <input
+          {/* <input
             name="owner"
             placeholder="Owner"
             value={form.owner}
             onChange={handleChange}
             className="w-full border p-2 rounded"
-          />
+          /> */}
 
           <div className="flex gap-2 pt-3">
             <button
