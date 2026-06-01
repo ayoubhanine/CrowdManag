@@ -25,7 +25,7 @@ const Navbar = () => {
         {/* Si l'utilisateur est un investisseur, on peut aussi afficher son solde (balance) */}
         {user?.role === 'investor' && (
           <span className="text-xs bg-emerald-50 text-emerald-700 font-semibold px-2.5 py-1 rounded-full border border-emerald-200 mr-2">
-            💰 {user.balance} €
+            💰 {user.balance} MAD
           </span>
         )}
 
