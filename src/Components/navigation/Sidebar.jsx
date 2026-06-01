@@ -1,15 +1,16 @@
-import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { logout } from '../../store/slices/authSlice'; // Ajuste le chemin selon ton projet
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../store/slices/authSlice"; // Ajuste le chemin selon ton projet
 
 const Sidebar = () => {
+  const currentUser = useSelector((state) => state.auth?.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLogout = () => {
     dispatch(logout());
-    navigate('/login');
+    navigate("/login");
   };
 
   return (
@@ -17,33 +18,35 @@ const Sidebar = () => {
       {/* Haut de la Sidebar : Logo et Liens */}
       <div>
         <h2 className="text-xl font-bold text-emerald-400 flex items-center gap-2 mb-8">
-           Crowdfunder
+          Crowdfunder
         </h2>
-        
+
         <nav className="flex flex-col gap-3">
-          <Link 
-            to="/" 
+          <Link
+            to="/"
             className="text-slate-300 hover:text-white hover:bg-slate-800 px-3 py-2 rounded-lg text-sm font-medium transition-all"
           >
             📊 Dashboard
           </Link>
-          <Link 
-            to="/projects" 
+          <Link
+            to="/projects"
             className="text-slate-300 hover:text-white hover:bg-slate-800 px-3 py-2 rounded-lg text-sm font-medium transition-all"
           >
             📁 Projects
           </Link>
-          <Link 
-            to="/projects/create" 
+          <Link
+            to="/projects/create"
             className="text-slate-300 hover:text-white hover:bg-slate-800 px-3 py-2 rounded-lg text-sm font-medium transition-all"
           >
             ➕ Create Project
           </Link>
-          <Link 
-            to="/investisseurs" 
+          <Link
+            to={currentUser?.role === "owner" ? "/investisseurs" : "/portfolio"}
             className="text-slate-300 hover:text-white hover:bg-slate-800 px-3 py-2 rounded-lg text-sm font-medium transition-all"
           >
-            👥 Investisseurs
+            {currentUser?.role === "owner"
+              ? "👥 Investisseurs"
+              : "💼 Portfolio"}
           </Link>
         </nav>
       </div>

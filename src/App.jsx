@@ -9,6 +9,7 @@ import ProjectDetailsPage from "./Components/DeatilsProject";
 import EditProjectPage from "./Components/EditProject";
 import Investors from "./pages/Investors";
 import Dashboard from "./pages/DashboardPage"
+import Portfolio from "./pages/Portofolio";
 
 
 
@@ -30,6 +31,7 @@ function App() {
           <Route path="projects/:id" element={<ProjectDetailsPage />} />
           <Route path="/projects/:id/edit" element={<EditProjectPage />} />
           <Route path="investisseurs" element={<Investors />} />
+         <Route path="/portfolio" element={<Portfolio />} />
         </Route>
       </Routes>
     </BrowserRouter>
