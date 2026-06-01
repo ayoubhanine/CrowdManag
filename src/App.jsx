@@ -8,7 +8,9 @@ import AjouterProject from "./Components/AjouterProject";
 import ProjectDetailsPage from "./Components/DeatilsProject";
 import EditProjectPage from "./Components/EditProject";
 import Investors from "./pages/Investors";
-import Dashboard from "./pages/DashboardPage"
+// import Dashboard from "./pages/DashboardPage"
+// import DashboardInvestor from "./pages/DashboardInvestor";
+import DashboardRouter from "./pages/DashboardRouter";
 
 
 
@@ -22,7 +24,7 @@ function App() {
 
         {/* 2. ROUTES PRIVÉES : Le MainLayout les enveloppe et les sécurise */}
         <Route path="/" element={<MainLayout />}>
-          <Route index element={<Dashboard />} />
+          <Route index element={<DashboardRouter />} />
           {/* Pas de "/" devant les sous-routes, React Router gère la suite de l'URL automatiquement */}
           <Route path="projects" element={<ProjectListPage />} />
           <Route path="projects/create" element={<AjouterProject />} />
