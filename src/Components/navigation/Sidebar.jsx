@@ -37,20 +37,20 @@ const Sidebar = () => {
           >
             📁 Projects
           </Link>
-          <Link
+          {/* <Link
             to="/projects/create"
             className="text-slate-300 hover:text-white hover:bg-slate-800 px-3 py-2 rounded-lg text-sm font-medium transition-all"
           >
             ➕ Create Project
-          </Link>
-          <Link
+          </Link> */}
+          {/* <Link
             to={currentUser?.role === "owner" ? "/investisseurs" : "/portfolio"}
             className="text-slate-300 hover:text-white hover:bg-slate-800 px-3 py-2 rounded-lg text-sm font-medium transition-all"
           >
             {currentUser?.role === "owner"
               ? "👥 Investisseurs"
               : "💼 Portfolio"}
-          </Link>
+          </Link> */}
           {/* ─── L'AFFICHAGE CONDITIONNEL ICI ─── */}
           {role === 'owner' && (
           <Link 
@@ -65,6 +65,14 @@ const Sidebar = () => {
           >
             👥 Investisseurs
           </Link>)}
+              {role === 'investor' && (<Link 
+            to="/portfolio" 
+            className="text-slate-300 hover:text-white hover:bg-slate-800 px-3 py-2 rounded-lg text-sm font-medium transition-all"
+          >
+            💼 Portfolio
+          </Link>)}
+
+
             {role === 'investor' && (<Link 
             to="/wallet" 
             className="text-slate-300 hover:text-white hover:bg-slate-800 px-3 py-2 rounded-lg text-sm font-medium transition-all"

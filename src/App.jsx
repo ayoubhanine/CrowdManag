@@ -8,10 +8,7 @@ import AjouterProject from "./Components/AjouterProject";
 import ProjectDetailsPage from "./Components/DeatilsProject";
 import EditProjectPage from "./Components/EditProject";
 import Investors from "./pages/Investors";
-import Dashboard from "./pages/DashboardPage"
 import Portfolio from "./pages/Portofolio";
-// import Dashboard from "./pages/DashboardPage"
-// import DashboardInvestor from "./pages/DashboardInvestor";
 import DashboardRouter from "./pages/DashboardRouter";
 import Wallet from "./pages/Wallet";
 
