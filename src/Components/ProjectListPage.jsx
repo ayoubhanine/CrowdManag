@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProjects } from "../store/slices/projectSlice";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +7,8 @@ export default function ProjectListPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
 
   const currentUser = useSelector((state) => state.auth?.user);
 
@@ -22,6 +24,17 @@ export default function ProjectListPage() {
     dispatch(fetchProjects());
   }, [dispatch]);
 
+  const filteredProjects = projectList.filter((proj) => {
+    const matchesSearch =
+      proj.title?.toLowerCase().includes(search.toLowerCase()) ||
+      proj.description?.toLowerCase().includes(search.toLowerCase());
+
+    const matchesStatus =
+      statusFilter === "" || proj.status === statusFilter;
+
+    return matchesSearch && matchesStatus;
+  });
+
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       {/* HEADER */}
@@ -34,7 +47,7 @@ export default function ProjectListPage() {
             CONTRÔLE CENTRALISÉ DES OPÉRATIONS DE CAPITAL
           </p>
         </div>
-     
+
         {isOwner && (
           <button
             onClick={() => navigate("/projects/create")}
@@ -46,13 +59,36 @@ export default function ProjectListPage() {
         )}
       </div>
 
+      {/* SEARCH & FILTER */}
+      <div className="bg-white p-4 rounded-xl shadow-sm mb-4 flex flex-col md:flex-row gap-4">
+        <input
+          type="text"
+          placeholder="Rechercher par titre ou description..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        />
+
+        <select
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+          className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        >
+          <option value="">Tous les statuts</option>
+          <option value="open">Open</option>
+          <option value="closed">Closed</option>
+        </select>
+      </div>
+
       {/* TABLE */}
       <div className="bg-white rounded-xl shadow-sm overflow-hidden">
         <table className="w-full border-collapse">
           <thead className="bg-gray-100">
             <tr>
               <th className="p-3 text-left text-sm font-semibold">Title</th>
-              <th className="p-3 text-left text-sm font-semibold">Description</th>
+              <th className="p-3 text-left text-sm font-semibold">
+                Description
+              </th>
               <th className="p-3 text-left text-sm font-semibold">Capital</th>
               <th className="p-3 text-left text-sm font-semibold">Current</th>
               <th className="p-3 text-left text-sm font-semibold">Status</th>
@@ -79,19 +115,19 @@ export default function ProjectListPage() {
               </tr>
             )}
 
-            {!loading && !error && projectList.length === 0 && (
+            {!loading && !error && filteredProjects.length === 0 && (
               <tr>
                 <td colSpan="8" className="text-center p-6 text-gray-500">
-                  Aucun projet trouvé.
+                  Aucun projet correspond à votre recherche.
                 </td>
               </tr>
             )}
 
-            {/* DATA */}
             {!loading &&
               !error &&
-              projectList.map((proj, index) => {
+              filteredProjects.map((proj, index) => {
                 const projectId = proj._id || proj.id;
+
                 return (
                   <tr
                     key={projectId || index}
@@ -100,34 +136,41 @@ export default function ProjectListPage() {
                     <td className="p-3 text-sm font-medium text-gray-900">
                       {proj.title}
                     </td>
+
                     <td className="p-3 text-sm text-gray-600">
                       {proj.description}
                     </td>
+
                     <td className="p-3 text-sm font-semibold text-gray-800">
                       {proj.capital} MAD
                     </td>
+
                     <td className="p-3 text-sm text-gray-700">
                       {proj.currentAmount} MAD
                     </td>
+
                     <td className="p-3 text-sm">
                       <span
-                        className={`px-2 py-1 rounded-full text-xs font-semibold
-                        ${
-                          proj.status === "active" || proj.status === "open"
+                        className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                          proj.status === "active" ||
+                          proj.status === "open"
                             ? "bg-green-100 text-green-700"
                             : proj.status === "closed"
-                              ? "bg-red-100 text-red-700"
-                              : "bg-yellow-100 text-yellow-700"
+                            ? "bg-red-100 text-red-700"
+                            : "bg-yellow-100 text-yellow-700"
                         }`}
                       >
                         {proj.status}
                       </span>
                     </td>
+
                     <td className="p-3 text-sm text-gray-700">
                       {proj.maxInvestmentPercent}%
                     </td>
+
                     <td className="p-3 text-sm text-gray-600">
-                      {typeof proj.owner === "string" && proj.owner.length > 10
+                      {typeof proj.owner === "string" &&
+                      proj.owner.length > 10
                         ? `${proj.owner.substring(0, 5)}...`
                         : proj.owner?.name || proj.owner || "System"}
                     </td>
