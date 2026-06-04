@@ -1,9 +1,18 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-
+import { useEffect } from 'react';
+import { useSelector,useDispatch } from 'react-redux';
+import { fetchWalletData } from '../../store/slices/walletSlice';
 const Navbar = () => {
+  const dispatch=useDispatch()
   // On récupère les infos de l'utilisateur connecté depuis le state global Redux
   const { user } = useSelector((state) => state.auth);
+  const{balance}=useSelector((state)=>state.wallet)
+
+  useEffect(() => {
+    if (user?.role === 'investor') {
+      dispatch(fetchWalletData());
+    }
+  }, [dispatch, user]);
 
   // Fonction rapide pour afficher un rôle propre à l'écran
   const formatRole = (role) => {
@@ -25,7 +34,7 @@ const Navbar = () => {
         {/* Si l'utilisateur est un investisseur, on peut aussi afficher son solde (balance) */}
         {user?.role === 'investor' && (
           <span className="text-xs bg-emerald-50 text-emerald-700 font-semibold px-2.5 py-1 rounded-full border border-emerald-200 mr-2">
-            💰 {user.balance} MAD
+            💰 {balance.toLocaleString()} MAD
           </span>
         )}
 
