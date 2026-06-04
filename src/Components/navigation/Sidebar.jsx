@@ -3,10 +3,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../store/slices/authSlice"; // Ajuste le chemin selon ton projet
 
+
+
 const Sidebar = () => {
   const currentUser = useSelector((state) => state.auth?.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const role=useSelector((state)=>state.auth.user?.role || state.auth.role)
 
   const handleLogout = () => {
     dispatch(logout());
@@ -48,6 +51,26 @@ const Sidebar = () => {
               ? "👥 Investisseurs"
               : "💼 Portfolio"}
           </Link>
+          {/* ─── L'AFFICHAGE CONDITIONNEL ICI ─── */}
+          {role === 'owner' && (
+          <Link 
+            to="/projects/create" 
+            className="text-slate-300 hover:text-white hover:bg-slate-800 px-3 py-2 rounded-lg text-sm font-medium transition-all"
+          >
+            ➕ Create Project
+          </Link>)}
+           {role === 'owner' && ( <Link 
+            to="/investisseurs" 
+            className="text-slate-300 hover:text-white hover:bg-slate-800 px-3 py-2 rounded-lg text-sm font-medium transition-all"
+          >
+            👥 Investisseurs
+          </Link>)}
+            {role === 'investor' && (<Link 
+            to="/wallet" 
+            className="text-slate-300 hover:text-white hover:bg-slate-800 px-3 py-2 rounded-lg text-sm font-medium transition-all"
+          >
+            👛 Wallet / Solde
+          </Link>)}
         </nav>
       </div>
 

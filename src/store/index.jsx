@@ -5,7 +5,8 @@ import projectReducer from "./slices/projectSlice";
 import dashboardReducer from "./slices/dashboardSlice";
 import partnerReducer from "./slices/partnerSlice";
 import portfolioReducer from "./slices/portofolioSlices";
-
+import walletReducer from "./slices/walletSlice";
+import inverstorDashboardSlice from "./slices/investorDashboardSlice";
 export const store = configureStore({
   reducer: {
     auth: authReducer,
@@ -13,5 +14,8 @@ export const store = configureStore({
     partners: partnerReducer,
     projects: projectReducer,
     portfolio: portfolioReducer,
+    investorDashboard:inverstorDashboardSlice,
+    wallet:walletReducer,
+    
   },
 });
