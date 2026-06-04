@@ -45,6 +45,12 @@ const Sidebar = () => {
           >
             👥 Investisseurs
           </Link>
+          <Link 
+            to="/wallet" 
+            className="text-slate-300 hover:text-white hover:bg-slate-800 px-3 py-2 rounded-lg text-sm font-medium transition-all"
+          >
+            👛 Wallet / Solde
+          </Link>
         </nav>
       </div>
 

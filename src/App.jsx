@@ -11,6 +11,7 @@ import Investors from "./pages/Investors";
 // import Dashboard from "./pages/DashboardPage"
 // import DashboardInvestor from "./pages/DashboardInvestor";
 import DashboardRouter from "./pages/DashboardRouter";
+import Wallet from "./pages/Wallet";
 
 
 
@@ -32,6 +33,7 @@ function App() {
           <Route path="projects/:id" element={<ProjectDetailsPage />} />
           <Route path="/projects/:id/edit" element={<EditProjectPage />} />
           <Route path="investisseurs" element={<Investors />} />
+          <Route path="wallet" element={<Wallet/>}/>
         </Route>
       </Routes>
     </BrowserRouter>
