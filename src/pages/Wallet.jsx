@@ -4,6 +4,8 @@ import { fetchWalletData, depositFundsServer } from '../store/slices/walletSlice
 
 const Wallet = () => {
   const [amountInput, setAmountInput] = useState('');
+  const [currentPage,setCurrentPage]=useState(1)
+  const itemsPerPage=5
   const dispatch = useDispatch();
   
   // Récupération des états depuis le store Redux
@@ -13,6 +15,11 @@ const Wallet = () => {
   useEffect(() => {
     dispatch(fetchWalletData());
   }, [dispatch]);
+
+  useEffect(()=>{
+    setCurrentPage(1)
+  },[history.length])
+
 
   const handleDeposit = (e) => {
     e.preventDefault();
@@ -25,6 +32,23 @@ const Wallet = () => {
     setAmountInput(''); // Reset le champ de saisie
   };
 
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+
+  const currentItems = history.slice(indexOfFirstItem, indexOfLastItem);
+ 
+  const totalPages = Math.ceil(history.length / itemsPerPage);
+
+  const handlePrevPage = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+  };
+
+
   return (
     <div className="p-6 max-w-4xl mx-auto text-white">
       <h1 className="text-3xl font-bold text-emerald-400 mb-6">👛 Mon Portefeuille</h1>
@@ -36,7 +60,7 @@ const Wallet = () => {
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        {/* Carte Solde Actuel */}
+        
         <div className="bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-lg col-span-1 flex flex-col justify-between">
           <div>
             <p className="text-slate-400 text-sm font-medium uppercase tracking-wider">Solde Actuel</p>
@@ -71,6 +95,11 @@ const Wallet = () => {
       <div className="bg-slate-800 rounded-xl border border-slate-700 shadow-lg overflow-hidden">
         <div className="p-5 border-b border-slate-700">
           <h3 className="text-lg font-semibold">Historique des opérations</h3>
+          {history.length > 0 && (
+            <span className="text-xs text-slate-400">
+              Total : {history.length} opération{history.length > 1 ? 's' : ''}
+            </span>
+          )}
         </div>
 
         {loading && history.length === 0 ? (
@@ -78,6 +107,7 @@ const Wallet = () => {
         ) : history.length === 0 ? (
           <p className="p-5 text-slate-400 text-center">Aucune transaction enregistrée pour le moment.</p>
         ) : (
+          <>
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
@@ -88,7 +118,7 @@ const Wallet = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-700 text-sm">
-                {history.map((op) => (
+                {currentItems.map((op) => (
                   <tr key={op._id} className="hover:bg-slate-750/40 transition-colors">
                     <td className="p-4 text-slate-300">
                       {new Date(op.date).toLocaleString('fr-FR')}
@@ -112,6 +142,35 @@ const Wallet = () => {
               </tbody>
             </table>
           </div>
+          {/* --- Composant de Contrôle de la Pagination --- */}
+            {totalPages > 1 && (
+              <div className="p-4 bg-slate-900/30 border-t border-slate-700 flex items-center justify-between sm:justify-end gap-4 text-sm">
+                <span className="text-slate-400">
+                  Page <strong className="text-slate-200">{currentPage}</strong> sur <strong className="text-slate-200">{totalPages}</strong>
+                </span>
+                
+                <div className="flex gap-2">
+                  <button
+                    onClick={handlePrevPage}
+                    disabled={currentPage === 1}
+                    className="px-3 py-1.5 rounded-lg bg-slate-700 text-slate-200 font-medium hover:bg-slate-600 disabled:opacity-40 disabled:hover:bg-slate-700 transition-all"
+                  >
+                    Précédent
+                  </button>
+                  <button
+                    onClick={handleNextPage}
+                    disabled={currentPage === totalPages}
+                    className="px-3 py-1.5 rounded-lg bg-slate-700 text-slate-200 font-medium hover:bg-slate-600 disabled:opacity-40 disabled:hover:bg-slate-700 transition-all"
+                  >
+                    Suivant
+                  </button>
+                </div>
+              </div>
+            )}
+            {/* ---------------------------------------------- */}
+          </>
+          
+          
         )}
       </div>
     </div>
